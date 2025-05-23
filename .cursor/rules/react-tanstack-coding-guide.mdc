@@ -1,0 +1,101 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 🧠 AI Assistant Coding Guide, React + TanStack Start
+
+This document defines the coding standards and structure preferences for working on a React + TanStack Start project. Follow strictly to match the dev's coding pattern.
+
+---
+
+## 🚀 Coding Rules
+
+### ⚛️ React
+
+*   **Functions**:
+    *   Use **function declarations** for **route page functional components** (e.g., components used with `createFileRoute`). This is because `createFileRoute` is often defined before the component, requiring the component to be hoisted.
+        Example:
+        ```tsx
+        export const Route = createFileRoute("/")({
+            component: HomePage,
+        });
+
+        function HomePage() {
+            return <div>Hello!</div>;
+        }
+        ```
+    *   For all **other types of functions** (non-route components, callbacks, utilities), use **arrow functions**.
+*   **Naming Conventions**: All **file and folder names** must be in `kebab-case`.
+*   **Indentation**: Use **4 spaces** for indentation (tab width).
+*   **Comments**: Add comments only for **important functions**. Existing comments must be preserved.
+*   **Exports**:
+    *   **Route Definitions (`Route` object)**: The `Route` object returned by `createFileRoute` from `@tanstack/react-router` must be a **named export**.
+        Example: `export const Route = createFileRoute('/about')({ component: AboutPage });`
+    *   **React Components (UI)**:
+        *   If a React component is defined in its own file and is meant to be imported and used (e.g., reusable UI components, or page components defined in separate files before being passed to `createFileRoute`), it must be a **default export** from that file.
+        *   Note: The actual page component function (like `AboutPage` in the example above) that is passed to `createFileRoute` within a route definition file (e.g., `about.tsx`) is typically *not* exported itself from that route file. It's usually a local function declaration.
+    *   **Other Exports**: All other exports from any file (e.g., helper functions, constants, types, hooks) must be **named exports**.
+*   **Imports**:
+    *   Always import React APIs using **named imports**, e.g.:
+      ```ts
+      import { useState, useEffect, ReactNode, ReactElement } from "react"; // ✅
+      // not React.useState ❌
+      ```
+*   **Context (React 19+):** Use the new `use()` hook to read from context:
+    ```ts
+    const user = use(UserContext); // ✅ React 19 style
+    // not useContext(UserContext) ❌
+    ```
+*   **State Management**: Use **Immer.js** for immutable state updates instead of the spread operator:
+    ```ts
+    import { produce } from "immer";
+
+    const nextState = produce(state, draft => {
+        draft.items.push(newItem);
+    });
+    ```
+
+### 📦 Package Manager
+
+*   **Primary**: Use **pnpm** for all package management tasks.
+*   **UI Components (shadcn/ui)**: Use the following format to add components:
+    ```bash
+    pnpm dlx shadcn@latest add <component-name>
+    ```
+    Example:
+    ```bash
+    pnpm dlx shadcn@latest add input button
+    ```
+
+### 📌 Required Package Versions
+
+*   `react`: **^19.1.0**
+*   `react-dom`: **^19.1.0**
+
+### ✅ Core Packages Used (Excluding devtools, eslint, prettier, etc.)
+
+*   `@radix-ui/react-slot`
+*   `@tanstack/react-form`
+*   `@tanstack/react-query`
+*   `@tanstack/react-router`
+*   `class-variance-authority`
+*   `clsx`
+*   `immer`
+*   `lucide-react`
+*   `react`
+*   `react-dom`
+*   `tailwind-merge`
+*   `tailwindcss-animate`
+*   `zod`
+*   `shadcn/ui`
+
+---
+
+## 🔍 Related Topics for Deep Dive (Consider these for future reference)
+
+*   Structuring scalable React apps with TanStack Router
+*   Understanding Client vs. Server rendering concepts with TanStack Start
+*   Linting rules for consistent codebase (e.g. ESLint + Prettier)
+*   pnpm workspace monorepo setup
+*   Auto-comment generation using AI for key functions

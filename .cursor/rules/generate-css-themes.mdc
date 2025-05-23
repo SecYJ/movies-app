@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Based on the color names and hex values in the image, construct CSS variables in the following format:
+
+--color-<color-name>:  hex value;
+
+
+
+Note that property should be kebab-case
