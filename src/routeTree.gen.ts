@@ -21,6 +21,11 @@ import { Route as PostsIndexImport } from './routes/posts.index'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as UsersUserIdImport } from './routes/users.$userId'
 import { Route as PostsPostIdImport } from './routes/posts.$postId'
+import { Route as LayoutTvSeriesImport } from './routes/_layout/tv-series'
+import { Route as LayoutMoviesImport } from './routes/_layout/movies'
+import { Route as LayoutBookmarkedImport } from './routes/_layout/bookmarked'
+import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
+import { Route as AuthSignInImport } from './routes/_auth/sign-in'
 import { Route as PostsPostIdDeepImport } from './routes/posts_.$postId.deep'
 
 // Create/Update Routes
@@ -84,6 +89,36 @@ const PostsPostIdRoute = PostsPostIdImport.update({
   getParentRoute: () => PostsRouteRoute,
 } as any)
 
+const LayoutTvSeriesRoute = LayoutTvSeriesImport.update({
+  id: '/tv-series',
+  path: '/tv-series',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const LayoutMoviesRoute = LayoutMoviesImport.update({
+  id: '/movies',
+  path: '/movies',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const LayoutBookmarkedRoute = LayoutBookmarkedImport.update({
+  id: '/bookmarked',
+  path: '/bookmarked',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+
+const AuthSignUpRoute = AuthSignUpImport.update({
+  id: '/_auth/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthSignInRoute = AuthSignInImport.update({
+  id: '/_auth/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PostsPostIdDeepRoute = PostsPostIdDeepImport.update({
   id: '/posts_/$postId/deep',
   path: '/posts/$postId/deep',
@@ -128,6 +163,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/redirect'
       preLoaderRoute: typeof RedirectImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof AuthSignInImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout/bookmarked': {
+      id: '/_layout/bookmarked'
+      path: '/bookmarked'
+      fullPath: '/bookmarked'
+      preLoaderRoute: typeof LayoutBookmarkedImport
+      parentRoute: typeof LayoutRouteImport
+    }
+    '/_layout/movies': {
+      id: '/_layout/movies'
+      path: '/movies'
+      fullPath: '/movies'
+      preLoaderRoute: typeof LayoutMoviesImport
+      parentRoute: typeof LayoutRouteImport
+    }
+    '/_layout/tv-series': {
+      id: '/_layout/tv-series'
+      path: '/tv-series'
+      fullPath: '/tv-series'
+      preLoaderRoute: typeof LayoutTvSeriesImport
+      parentRoute: typeof LayoutRouteImport
     }
     '/posts/$postId': {
       id: '/posts/$postId'
@@ -177,10 +247,16 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteRouteChildren {
+  LayoutBookmarkedRoute: typeof LayoutBookmarkedRoute
+  LayoutMoviesRoute: typeof LayoutMoviesRoute
+  LayoutTvSeriesRoute: typeof LayoutTvSeriesRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
+  LayoutBookmarkedRoute: LayoutBookmarkedRoute,
+  LayoutMoviesRoute: LayoutMoviesRoute,
+  LayoutTvSeriesRoute: LayoutTvSeriesRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
@@ -222,6 +298,11 @@ export interface FileRoutesByFullPath {
   '/users': typeof UsersRouteRouteWithChildren
   '/deferred': typeof DeferredRoute
   '/redirect': typeof RedirectRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/bookmarked': typeof LayoutBookmarkedRoute
+  '/movies': typeof LayoutMoviesRoute
+  '/tv-series': typeof LayoutTvSeriesRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/': typeof LayoutIndexRoute
@@ -233,6 +314,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/deferred': typeof DeferredRoute
   '/redirect': typeof RedirectRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/bookmarked': typeof LayoutBookmarkedRoute
+  '/movies': typeof LayoutMoviesRoute
+  '/tv-series': typeof LayoutTvSeriesRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/': typeof LayoutIndexRoute
@@ -248,6 +334,11 @@ export interface FileRoutesById {
   '/users': typeof UsersRouteRouteWithChildren
   '/deferred': typeof DeferredRoute
   '/redirect': typeof RedirectRoute
+  '/_auth/sign-in': typeof AuthSignInRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_layout/bookmarked': typeof LayoutBookmarkedRoute
+  '/_layout/movies': typeof LayoutMoviesRoute
+  '/_layout/tv-series': typeof LayoutTvSeriesRoute
   '/posts/$postId': typeof PostsPostIdRoute
   '/users/$userId': typeof UsersUserIdRoute
   '/_layout/': typeof LayoutIndexRoute
@@ -264,6 +355,11 @@ export interface FileRouteTypes {
     | '/users'
     | '/deferred'
     | '/redirect'
+    | '/sign-in'
+    | '/sign-up'
+    | '/bookmarked'
+    | '/movies'
+    | '/tv-series'
     | '/posts/$postId'
     | '/users/$userId'
     | '/'
@@ -274,6 +370,11 @@ export interface FileRouteTypes {
   to:
     | '/deferred'
     | '/redirect'
+    | '/sign-in'
+    | '/sign-up'
+    | '/bookmarked'
+    | '/movies'
+    | '/tv-series'
     | '/posts/$postId'
     | '/users/$userId'
     | '/'
@@ -287,6 +388,11 @@ export interface FileRouteTypes {
     | '/users'
     | '/deferred'
     | '/redirect'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
+    | '/_layout/bookmarked'
+    | '/_layout/movies'
+    | '/_layout/tv-series'
     | '/posts/$postId'
     | '/users/$userId'
     | '/_layout/'
@@ -302,6 +408,8 @@ export interface RootRouteChildren {
   UsersRouteRoute: typeof UsersRouteRouteWithChildren
   DeferredRoute: typeof DeferredRoute
   RedirectRoute: typeof RedirectRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
   PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
 }
 
@@ -311,6 +419,8 @@ const rootRouteChildren: RootRouteChildren = {
   UsersRouteRoute: UsersRouteRouteWithChildren,
   DeferredRoute: DeferredRoute,
   RedirectRoute: RedirectRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
   PostsPostIdDeepRoute: PostsPostIdDeepRoute,
 }
 
@@ -329,12 +439,17 @@ export const routeTree = rootRoute
         "/users",
         "/deferred",
         "/redirect",
+        "/_auth/sign-in",
+        "/_auth/sign-up",
         "/posts_/$postId/deep"
       ]
     },
     "/_layout": {
       "filePath": "_layout/route.tsx",
       "children": [
+        "/_layout/bookmarked",
+        "/_layout/movies",
+        "/_layout/tv-series",
         "/_layout/"
       ]
     },
@@ -357,6 +472,24 @@ export const routeTree = rootRoute
     },
     "/redirect": {
       "filePath": "redirect.tsx"
+    },
+    "/_auth/sign-in": {
+      "filePath": "_auth/sign-in.tsx"
+    },
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.tsx"
+    },
+    "/_layout/bookmarked": {
+      "filePath": "_layout/bookmarked.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/movies": {
+      "filePath": "_layout/movies.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/tv-series": {
+      "filePath": "_layout/tv-series.tsx",
+      "parent": "/_layout"
     },
     "/posts/$postId": {
       "filePath": "posts.$postId.tsx",

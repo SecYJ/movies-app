@@ -25,58 +25,61 @@ function RouteComponent() {
     });
 
     return (
-        <div className="md:py-6">
-            <header className="flex items-center justify-between bg-blue-900 p-4 md:mx-6">
-                <Logo />
-                <nav className="flex items-center gap-6 md:gap-8">
-                    <Link to="/">
-                        <IconNavHome className="h-5 w-5" />
-                    </Link>
-                    <Link to=".">
-                        <IconNavMovies className="h-5 w-5" />
-                    </Link>
-                    <Link to=".">
-                        <IconNavTvSeries className="h-5 w-5" />
-                    </Link>
-                    <Link to=".">
-                        <IconNavBookmark className="h-5 w-5" />
-                    </Link>
-                </nav>
-                <img
-                    src={Avatar}
-                    alt="avatar"
-                    className="h-10 w-10 rounded-full"
-                />
-            </header>
-            <div className="container mx-auto px-4 py-6">
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        form.handleSubmit();
-                    }}
-                >
-                    <div className="group flex gap-4">
-                        <IconSearch className="text-white" />
-                        <form.Field name="search">
-                            {(field) => (
-                                <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                    placeholder="Search  for movies or TV series"
-                                    className="caret w-full rounded-none border-0 border-b border-transparent bg-transparent px-2 pb-2.5 text-lg text-white caret-red-500 group-hover:border-b group-hover:border-b-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0"
-                                />
-                            )}
-                        </form.Field>
-                    </div>
-                </form>
+        <div className="container mx-auto grid min-h-screen px-4">
+            <div className="md:py-6 xl:grid xl:grid-cols-[auto_1fr] xl:gap-9 xl:py-0">
+                <header className="-mx-4 flex items-center justify-between rounded-lg bg-blue-900 p-4 md:mx-0 xl:my-8 xl:flex-col">
+                    <Logo />
+                    <nav className="flex items-center gap-6 md:gap-8 xl:flex-col">
+                        <Link to="/">
+                            <IconNavHome className="h-5 w-5" />
+                        </Link>
+                        <Link to=".">
+                            <IconNavMovies className="h-5 w-5" />
+                        </Link>
+                        <Link to=".">
+                            <IconNavTvSeries className="h-5 w-5" />
+                        </Link>
+                        <Link to=".">
+                            <IconNavBookmark className="h-5 w-5" />
+                        </Link>
+                    </nav>
+                    <img
+                        src={Avatar}
+                        alt="avatar"
+                        className="h-10 w-10 rounded-full"
+                    />
+                </header>
+                <div className="xl:py-16">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            form.handleSubmit();
+                        }}
+                        className="my-6 md:my-8 xl:mt-0"
+                    >
+                        <div className="group flex gap-4">
+                            <IconSearch className="text-white" />
+                            <form.Field name="search">
+                                {(field) => (
+                                    <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) =>
+                                            field.handleChange(e.target.value)
+                                        }
+                                        placeholder="Search  for movies or TV series"
+                                        className="caret w-full rounded-none border-0 border-b border-transparent bg-transparent px-2 pb-2.5 text-lg text-white caret-red-500 group-hover:border-b group-hover:border-b-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0"
+                                    />
+                                )}
+                            </form.Field>
+                        </div>
+                    </form>
+                    <Outlet />
+                </div>
             </div>
-            <Outlet />
         </div>
     );
 }
