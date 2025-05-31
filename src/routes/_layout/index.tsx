@@ -138,6 +138,7 @@ function Home() {
                     ];
 
                     return (
+                        // <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
                         <ul className="grid grid-cols-2 gap-4">
                             {recommendedData.map((item, index) => (
                                 <li

@@ -16,6 +16,7 @@ import { Route as DeferredImport } from './routes/deferred'
 import { Route as UsersRouteImport } from './routes/users.route'
 import { Route as PostsRouteImport } from './routes/posts.route'
 import { Route as LayoutRouteImport } from './routes/_layout/route'
+import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as UsersIndexImport } from './routes/users.index'
 import { Route as PostsIndexImport } from './routes/posts.index'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
@@ -56,6 +57,11 @@ const PostsRouteRoute = PostsRouteImport.update({
 
 const LayoutRouteRoute = LayoutRouteImport.update({
   id: '/_layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -108,15 +114,15 @@ const LayoutBookmarkedRoute = LayoutBookmarkedImport.update({
 } as any)
 
 const AuthSignUpRoute = AuthSignUpImport.update({
-  id: '/_auth/sign-up',
+  id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthSignInRoute = AuthSignInImport.update({
-  id: '/_auth/sign-in',
+  id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const PostsPostIdDeepRoute = PostsPostIdDeepImport.update({
@@ -129,6 +135,13 @@ const PostsPostIdDeepRoute = PostsPostIdDeepImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/_layout': {
       id: '/_layout'
       path: ''
@@ -169,14 +182,14 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof AuthSignInImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/_auth/sign-up': {
       id: '/_auth/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
       preLoaderRoute: typeof AuthSignUpImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/_layout/bookmarked': {
       id: '/_layout/bookmarked'
@@ -246,6 +259,20 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 interface LayoutRouteRouteChildren {
   LayoutBookmarkedRoute: typeof LayoutBookmarkedRoute
   LayoutMoviesRoute: typeof LayoutMoviesRoute
@@ -312,6 +339,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '': typeof AuthRouteRouteWithChildren
   '/deferred': typeof DeferredRoute
   '/redirect': typeof RedirectRoute
   '/sign-in': typeof AuthSignInRoute
@@ -329,6 +357,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
   '/_layout': typeof LayoutRouteRouteWithChildren
   '/posts': typeof PostsRouteRouteWithChildren
   '/users': typeof UsersRouteRouteWithChildren
@@ -368,6 +397,7 @@ export interface FileRouteTypes {
     | '/posts/$postId/deep'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | ''
     | '/deferred'
     | '/redirect'
     | '/sign-in'
@@ -383,6 +413,7 @@ export interface FileRouteTypes {
     | '/posts/$postId/deep'
   id:
     | '__root__'
+    | '/_auth'
     | '/_layout'
     | '/posts'
     | '/users'
@@ -403,24 +434,22 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
   PostsRouteRoute: typeof PostsRouteRouteWithChildren
   UsersRouteRoute: typeof UsersRouteRouteWithChildren
   DeferredRoute: typeof DeferredRoute
   RedirectRoute: typeof RedirectRoute
-  AuthSignInRoute: typeof AuthSignInRoute
-  AuthSignUpRoute: typeof AuthSignUpRoute
   PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   LayoutRouteRoute: LayoutRouteRouteWithChildren,
   PostsRouteRoute: PostsRouteRouteWithChildren,
   UsersRouteRoute: UsersRouteRouteWithChildren,
   DeferredRoute: DeferredRoute,
   RedirectRoute: RedirectRoute,
-  AuthSignInRoute: AuthSignInRoute,
-  AuthSignUpRoute: AuthSignUpRoute,
   PostsPostIdDeepRoute: PostsPostIdDeepRoute,
 }
 
@@ -434,14 +463,20 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/_auth",
         "/_layout",
         "/posts",
         "/users",
         "/deferred",
         "/redirect",
-        "/_auth/sign-in",
-        "/_auth/sign-up",
         "/posts_/$postId/deep"
+      ]
+    },
+    "/_auth": {
+      "filePath": "_auth/route.tsx",
+      "children": [
+        "/_auth/sign-in",
+        "/_auth/sign-up"
       ]
     },
     "/_layout": {
@@ -474,10 +509,12 @@ export const routeTree = rootRoute
       "filePath": "redirect.tsx"
     },
     "/_auth/sign-in": {
-      "filePath": "_auth/sign-in.tsx"
+      "filePath": "_auth/sign-in.tsx",
+      "parent": "/_auth"
     },
     "/_auth/sign-up": {
-      "filePath": "_auth/sign-up.tsx"
+      "filePath": "_auth/sign-up.tsx",
+      "parent": "/_auth"
     },
     "/_layout/bookmarked": {
       "filePath": "_layout/bookmarked.tsx",
