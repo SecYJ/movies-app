@@ -5,7 +5,10 @@ export const getAuthFormOptions = (mode: "login" | "signup") => {
         defaultValues: {
             email: "",
             password: "",
-            ...(mode === "signup" && { repeatPassword: "" }),
+            ...(mode === "signup" && {
+                repeatPassword: "",
+                username: "",
+            }),
         },
     });
 };

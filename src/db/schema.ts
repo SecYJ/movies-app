@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { format } from "date-fns";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -9,14 +9,21 @@ export const categoryEnum = ["movie", "tv-series"] as const;
 const createTimestampFields = () => ({
     createdAt: text()
         .notNull()
-        .default(sql`(datetime('now'))`),
+        .default(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
     updatedAt: text()
         .notNull()
-        .default(sql`(datetime('now'))`)
-        .$onUpdateFn(() => {
-            const now = new Date();
-            return now.toISOString().slice(0, 19).replace("T", " ");
-        }),
+        .default(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
+});
+
+export const sessionsTable = sqliteTable("sessions_table", {
+    id: text()
+        .primaryKey()
+        .$defaultFn(() => crypto.randomUUID()),
+    sessionToken: text().notNull(),
+    userId: text()
+        .notNull()
+        .references(() => usersTable.id, { onDelete: "cascade" }),
+    expiresAt: text().notNull(),
 });
 
 export const usersTable = sqliteTable("users_table", {

@@ -89,6 +89,18 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                 }}
             >
                 <form.Field
+                    name="username"
+                    children={(field) => (
+                        <Input
+                            placeholder="Username"
+                            className="rounded-none border-0 border-b border-b-blue-500 caret-red-500 focus-visible:ring-0"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            onBlur={field.handleBlur}
+                        />
+                    )}
+                />
+                <form.Field
                     name="email"
                     children={(field) => (
                         <Input

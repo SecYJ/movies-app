@@ -1,8 +1,19 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 import Logo from "@/assets/logo.svg?react";
+import { checkAuth } from "@/services/auth";
 
 export const Route = createFileRoute("/_auth")({
+    beforeLoad: async () => {
+        console.log("run?");
+        const sessionData = await checkAuth();
+
+        console.log("sessionData", sessionData);
+
+        // if (sessionData) {
+        //     redirect
+        // }
+    },
     component: RouteComponent,
 });
 

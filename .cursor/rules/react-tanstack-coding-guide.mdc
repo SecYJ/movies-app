@@ -90,6 +90,21 @@ This document defines the coding standards and structure preferences for working
 *   `zod`
 *   `shadcn/ui`
 
+### 🛡️ Zod (Schema Validation)
+
+*   **Version**: Use **Zod v4**.
+*   **Imports**: Always import Zod from the `"zod/v4"` subpath.
+    ```ts
+    import { z } from "zod/v4"; // ✅
+    // not import { z } from "zod"; ❌
+    ```
+*   **Usage**: Refer to the [official Zod v4 documentation](mdc:https:/zod.dev/v4) for syntax and features.
+*   Prioritize using new Zod v4 features where appropriate, such as:
+    *   Simplified error customization.
+    *   `z.stringbool()` for boolean string parsing.
+    *   Multiple values in `z.literal()`.
+    *   `.overwrite()` for transforms that don't change the inferred type.
+
 ---
 
 ## 🔍 Related Topics for Deep Dive (Consider these for future reference)
