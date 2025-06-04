@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 import AuthForm from "./-form/auth-form";
@@ -13,9 +12,5 @@ export const Route = createFileRoute("/_auth/sign-up")({
 });
 
 function RouteComponent() {
-    const user = useSuspenseQuery(getUserQueryOptions());
-
-    console.log(user.data);
-
     return <AuthForm mode="signup" />;
 }

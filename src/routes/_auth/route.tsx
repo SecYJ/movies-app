@@ -1,23 +1,20 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import Logo from "@/assets/logo.svg?react";
 import { checkAuth } from "@/services/auth";
 
 export const Route = createFileRoute("/_auth")({
     beforeLoad: async () => {
-        console.log("run?");
         const sessionData = await checkAuth();
 
-        console.log("sessionData", sessionData);
-
-        // if (sessionData) {
-        //     redirect
-        // }
+        if (sessionData?.user) {
+            throw redirect({ to: "/" });
+        }
     },
-    component: RouteComponent,
+    component: AuthLayout,
 });
 
-function RouteComponent() {
+function AuthLayout() {
     return (
         <div className="grid min-h-screen items-center">
             <div className="relative">

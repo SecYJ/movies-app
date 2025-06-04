@@ -1,5 +1,10 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+    createFileRoute,
+    Link,
+    Outlet,
+    redirect,
+} from "@tanstack/react-router";
 
 import IconNavBookmark from "@/assets/icon-nav-bookmark.svg?react";
 import IconNavHome from "@/assets/icon-nav-home.svg?react";
@@ -9,8 +14,16 @@ import IconSearch from "@/assets/icon-search.svg?react";
 import Avatar from "@/assets/image-avatar.png";
 import Logo from "@/assets/logo.svg?react";
 import { Input } from "@/components/ui/input";
+import { checkAuth } from "@/services/auth";
 
 export const Route = createFileRoute("/_layout")({
+    beforeLoad: async () => {
+        const sessionData = await checkAuth();
+
+        if (!sessionData?.user) {
+            throw redirect({ to: "/sign-in" });
+        }
+    },
     component: RouteComponent,
 });
 
